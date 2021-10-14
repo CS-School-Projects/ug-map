@@ -9,8 +9,8 @@ import app.graph.Digraph;
 import app.graph.Node;
 
 public class Dijkstra {
-    public static ArrayList<Node> findShortestPath(Digraph graph, Node source, Node destination){
-       
+    public static ArrayList<Node> findShortestPath(Digraph graph, Node source, Node destination) {
 
+        return new ArrayList<Node>();
     }
 }
