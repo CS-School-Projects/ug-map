@@ -3,6 +3,7 @@ package app.graph;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
+import static app.utils.Functions.*;
 
 
 public class Digraph {
@@ -63,6 +64,18 @@ public class Digraph {
 
     public int getNodeSize() {
         return nodeSize;
+    }
+
+    public void printGraph(){
+        for (HashMap.Entry<Node, ArrayList<Node>> entry : graph.entrySet()) {
+            Node node = entry.getKey();
+            ArrayList<Node> destinations = entry.getValue();
+            StringBuilder builder = new StringBuilder();
+            for (Node destinatnion : destinations){
+                builder.append(" "+destinatnion.getName());
+            }
+            println(node.getName() + " --> " + builder.toString());
+        }
     }
 
 }

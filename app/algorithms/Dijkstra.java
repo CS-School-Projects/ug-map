@@ -2,7 +2,6 @@ package app.algorithms;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 
 import app.graph.Digraph;
 import static app.utils.Functions.*;
@@ -10,72 +9,122 @@ import app.graph.Edge;
 import app.graph.Node;
 
 public class Dijkstra {
-    private static ArrayList<Node> Q = new ArrayList<>();
-    private static HashMap<Node, Long> dist = new HashMap<>();
-    private static HashMap<Node, Node> prev = new HashMap<>();
+    // Track all unvisited nodes in the graph.
+    private static ArrayList<Node> UNVISITED = new ArrayList<>(); 
+
+     // A map of each node and the min cost/distance to each each.
+    private static HashMap<Node, Long> DISTANCE_MAP = new HashMap<>();
+
+    // A map of a node and the previous node to reach it. Used later to reconstruct the min path.
+    private static HashMap<Node, Node> PREVIOUS_NODE = new HashMap<>(); 
 
     public static void findShortestPath(Digraph graph, Node source, Node destination){
-        for(Node node: graph.getNodes()){
-            dist.put(node, Long.MAX_VALUE);
-            prev.put(node, null);
-            Q.add(node);
-        }
-        dist.put(source, 0L);
 
-        while(Q.size() > 0){
-            Node u = findVertextWithMinDist();
-            Q.remove(u);
-            ArrayList<Edge> edges = graph.getDestinationEdges(u);
+        if(source == destination){
+            print(source.getName());
+            return;
+        }
+
+        // Set the cost to reach each node to infinity.
+        for(Node node: graph.getNodes()){
+            DISTANCE_MAP.put(node, Long.MAX_VALUE);
+            PREVIOUS_NODE.put(node, null);
+            UNVISITED.add(node);
+        }
+
+        // Set the cost to reach the source node to zero.
+        DISTANCE_MAP.put(source, 0L);
+
+        // Find the node with least distance to reach.
+        Node minNode = findVertextWithMinDist();
+        while(UNVISITED.size() > 0 && minNode != null){
+            // Find the node with least distance to reach.
+            minNode = findVertextWithMinDist();
+
+            // Mark this node as visited.
+            UNVISITED.remove(minNode);
+
+            // Explore all the neighbours of this node.
+            ArrayList<Edge> edges = graph.getDestinationEdges(minNode);
             for(Edge edge : edges){
-                if(Q.contains(edge.getDestination())){
-                    long alt = dist.get(u) + edge.getDistance();
-                    if (alt < dist.get(edge.getDestination())){
-                        dist.put(edge.getDestination(), alt);
-                        prev.put(edge.getDestination(), u);
+                // Checking for cyles: i.e., if we've not already visited this node.
+                if(UNVISITED.contains(edge.getDestination())){
+                    
+                    // Calculate alternative cost
+                    long alt = DISTANCE_MAP.get(minNode) + edge.getDistance();
+
+                    if (alt < DISTANCE_MAP.get(edge.getDestination())){ // If the alternative cost is smaller than the current cost.
+                        // Update the min cost to reach this node.
+                        DISTANCE_MAP.put(edge.getDestination(), alt);
+
+                        // Udate the previous node to reach this current node. 
+                        PREVIOUS_NODE.put(edge.getDestination(), minNode);
                     }
                 }
-                printPrevious();
             }
-        }    
-
-        println("DONE");
-        printPrevious();
+        }
+        printShortestPath(source,destination);
+        printDistances(destination);
     }
     
-    private static void printDistances(){
-        println("*****************************");
-        for (HashMap.Entry<Node, Long> entry : dist.entrySet()) {
-            Node node = entry.getKey();
-            long d = entry.getValue();
-            println(node.getName() + " --> " + d);
-        }
+    private static void printDistances(Node destination){
+        // Print each node and the min cost to reach it from the source node.
+
+        println(DISTANCE_MAP.get(destination));
+
+        // println("*****************************");
+        // for (HashMap.Entry<Node, Long> entry : DISTANCE_MAP.entrySet()) {
+        //     Node node = entry.getKey();
+        //     long d = entry.getValue();
+        //     println(node.getName() + " --> " + d);
+        // }
     }
 
     private static void printPrevious(){
+        // Print each node and the previous node to reach it. 
         println("*****************************");
-        for (HashMap.Entry<Node, Node> entry : prev.entrySet()) {
+        for (HashMap.Entry<Node, Node> entry : PREVIOUS_NODE.entrySet()) {
             Node node = entry.getKey();
-            Node prev = entry.getValue();
-            if(prev != null)
-            println(node.getName() + " --> " + prev.getName());
+            Node PREVIOUS_NODE = entry.getValue();
+            if(PREVIOUS_NODE != null)
+            println(node.getName() + " --> " + PREVIOUS_NODE.getName());
             else{
                 println(  node.getName() + " --> " +"Nope");
             }
         }
     }
 
+    private static void printShortestPath(Node source, Node destination){
+        // Reconstruct the path to the destination using the the previous nodes.
+        println("*****************************");
+        ArrayList<Node> path = new ArrayList<>();
+        print(source.getName());
+        while (PREVIOUS_NODE.get(destination) != null ){
+            path.add(destination);
+            destination = PREVIOUS_NODE.get(destination);
+        }
+
+        for(int i = path.size() -1; i >= 0; i--){
+            Node node = path.get(i);
+            print(" --> " + node.getName());
+        }
+        println("");
+    }
+
     private static Node findVertextWithMinDist() {
+        // Linear search for the min cost node based on the distance. 
         Node minNode = null;
         long minDistance = Long.MAX_VALUE;
-
-        for (HashMap.Entry<Node, Long> entry : dist.entrySet()) {
+        for (HashMap.Entry<Node, Long> entry : DISTANCE_MAP.entrySet()) {
             Node node = entry.getKey();
             Long distance = entry.getValue();
-           if(Q.contains(node) && distance < minDistance){
+           if(UNVISITED.contains(node) && distance < minDistance){
                 minDistance = distance;
                 minNode = node;
            }
         }
         return minNode;
     }
+
+    
 }

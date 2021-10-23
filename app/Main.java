@@ -1,20 +1,17 @@
 package app;
 
 
-import java.util.ArrayList;
-
 import app.algorithms.Dijkstra;
 import app.graph.Digraph;
-import app.graph.Graph;
 import app.graph.Edge;
+import app.graph.Graph;
 import app.graph.Node;
 
-import static app.utils.Functions.*;
 
 public class Main{
     public static void main(String[] args) {
-        // Digraph graph = new Digraph();
-        Graph graph = new Graph();
+        Digraph graph = new Digraph();
+        // Graph graph = new Graph();
         Node a = new Node("A");
         Node b = new Node("B");
         Node c = new Node("C");
@@ -43,7 +40,9 @@ public class Main{
 
         graph.addEdge(new Edge(e, f, 22));
 
-        Dijkstra.findShortestPath(graph, a,e);
+        graph.printGraph();
+
+        Dijkstra.findShortestPath(graph, b,a);
         
     }
 }
