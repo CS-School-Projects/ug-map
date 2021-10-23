@@ -11,10 +11,8 @@ public class Node {
         return name;
     }
 
-    // @Override
-    // public boolean equals(Object obj) {
-    //     if(if)
-    //     return this.name.equals(obj.name)
-    // }
-
+    @Override
+    public String toString() {
+        return this.name;
+    }    
 }

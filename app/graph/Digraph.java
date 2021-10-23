@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
+
 public class Digraph {
-    private HashMap<Node, ArrayList<Node>> graph = new HashMap<>();
-    private ArrayList<Edge> edges = new ArrayList<>();
+    protected HashMap<Node, ArrayList<Node>> graph = new HashMap<>();
+    protected ArrayList<Edge> edges = new ArrayList<>();
     private int nodeSize = 0;
 
 
@@ -26,6 +27,16 @@ public class Digraph {
                 graph.get(source).add(edge.getDestination());
             }
         }
+    }
+
+    public ArrayList<Edge> getDestinationEdges(Node source){
+        ArrayList<Edge> destinations = new ArrayList<>();
+        for (Edge edge: this.edges){
+            if (edge.getSource() == source){
+                 destinations.add(edge);
+            }
+        }
+        return destinations;
     }
 
     public Edge getEdge(Node source, Node destination) {
