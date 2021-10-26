@@ -7,5 +7,32 @@ This is a terminal based app written in Java to desmonstrate the application of 
 - Dijstrak's algorithm was used to find the best route based distances.
 - A* algorithm was used to find the best route based on time.
 
-## Running app
+
+## Language
+- Java 
+
+## Cloning the Repo
+Clone the repository and open it in an editor.
+```bash
+git clone https://github.com/dodziraynard/ug-map.git
+cd ug-map
+```
+
+## Compiling and Running
+
+```bash
+javac app/Main.java
+```
+
+#### Compile
+```bash
+javac app/Main.java
+```
+
+#### Run
+```bash
+java app.Main
+```
+
+## Screenshot
 ![running in terminal](screenshots/mainscreen.png)
