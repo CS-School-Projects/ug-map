@@ -7,32 +7,31 @@ import static app.utils.Functions.*;
 
 
 public class Digraph {
-    protected HashMap<Node, ArrayList<Node>> graph = new HashMap<>();
-    protected ArrayList<Edge> edges = new ArrayList<>();
+    protected final HashMap<Node, ArrayList<Node>> GRAPH = new HashMap<>();
+    protected final ArrayList<Edge> EDGES = new ArrayList<>();
     private int nodeSize = 0;
 
-
     public void addNode(Node node){
-        if (!graph.containsKey(node)){
-            graph.put(node, new ArrayList<>());
+        if (!GRAPH.containsKey(node)){
+            GRAPH.put(node, new ArrayList<>());
             nodeSize++;
         }
     }
 
     public void addEdge(Edge edge){
-        if(edges.contains(edge)) return;
+        if(EDGES.contains(edge)) return;
 
-        this.edges.add(edge);
-        for(Node source : graph.keySet()){
+        this.EDGES.add(edge);
+        for(Node source : GRAPH.keySet()){
             if (source == edge.getSource()){
-                graph.get(source).add(edge.getDestination());
+                GRAPH.get(source).add(edge.getDestination());
             }
         }
     }
 
     public ArrayList<Edge> getDestinationEdges(Node source){
         ArrayList<Edge> destinations = new ArrayList<>();
-        for (Edge edge: this.edges){
+        for (Edge edge: this.EDGES){
             if (edge.getSource() == source){
                  destinations.add(edge);
             }
@@ -41,7 +40,7 @@ public class Digraph {
     }
 
     public Edge getEdge(Node source, Node destination) {
-       for (Edge edge: this.edges){
+       for (Edge edge: this.EDGES){
            if (edge.getSource() == source && edge.getDestination() == destination){
                return edge;
            }
@@ -50,8 +49,8 @@ public class Digraph {
     }
 
     public Node getNodeByName(String name){
-        for(Node node : graph.keySet()){
-            if (node.getName().equals(name)){
+        for(Node node : GRAPH.keySet()){
+            if (node.getName().toLowerCase().equals(name.toLowerCase())){
                 return node;
             }
         }
@@ -59,7 +58,7 @@ public class Digraph {
     }
 
     public Set<Node> getNodes(){
-        return this.graph.keySet();
+        return this.GRAPH.keySet();
     }
 
     public int getNodeSize() {
@@ -67,14 +66,34 @@ public class Digraph {
     }
 
     public void printGraph(){
-        for (HashMap.Entry<Node, ArrayList<Node>> entry : graph.entrySet()) {
+        println("\n          GRAPH: ADJACENCY LIST                ");
+        println("              PLACES ON CAMPUS                 \n");
+        for (HashMap.Entry<Node, ArrayList<Node>> entry : GRAPH.entrySet()) {
             Node node = entry.getKey();
             ArrayList<Node> destinations = entry.getValue();
             StringBuilder builder = new StringBuilder();
+            builder.append("[");
+            boolean emptyList = true;
             for (Node destinatnion : destinations){
-                builder.append(" "+destinatnion.getName());
+                if(emptyList)
+                builder.append(destinatnion.getName());
+                else
+                builder.append(", "+destinatnion.getName());
+                emptyList = false;
             }
-            println(node.getName() + " --> " + builder.toString());
+            builder.append("]");
+            println(node.getName() + "-->" + builder.toString());
+            println("");
+        }
+    }
+
+    public void listPlaces(Node except){
+        int index = 1;
+        for(Node node : GRAPH.keySet()){
+            if (node != except){
+                println(index + ". " + node.getName());
+            }
+            index++;
         }
     }
 

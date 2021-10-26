@@ -12,6 +12,15 @@ public class Node {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Node){
+            Node other = (Node) obj;
+            return other.getName().equals(getName());
+            }
+        return false;
+    }
+    
+    @Override
     public String toString() {
         return this.name;
     }    

@@ -12,8 +12,8 @@ public class Dijkstra {
     // Track all unvisited nodes in the graph.
     private static ArrayList<Node> UNVISITED = new ArrayList<>(); 
 
-     // A map of each node and the min cost/distance to each each.
-    private static HashMap<Node, Long> DISTANCE_MAP = new HashMap<>();
+    // A map of each node and the min cost/distance to each each.
+    private static HashMap<Node, Integer> DISTANCE_MAP = new HashMap<>();
 
     // A map of a node and the previous node to reach it. Used later to reconstruct the min path.
     private static HashMap<Node, Node> PREVIOUS_NODE = new HashMap<>(); 
@@ -27,13 +27,13 @@ public class Dijkstra {
 
         // Set the cost to reach each node to infinity.
         for(Node node: graph.getNodes()){
-            DISTANCE_MAP.put(node, Long.MAX_VALUE);
+            DISTANCE_MAP.put(node, Integer.MAX_VALUE);
             PREVIOUS_NODE.put(node, null);
             UNVISITED.add(node);
         }
 
         // Set the cost to reach the source node to zero.
-        DISTANCE_MAP.put(source, 0L);
+        DISTANCE_MAP.put(source, 0);
 
         // Find the node with least distance to reach.
         Node minNode = findVertextWithMinDist();
@@ -51,7 +51,7 @@ public class Dijkstra {
                 if(UNVISITED.contains(edge.getDestination())){
                     
                     // Calculate alternative cost
-                    long alt = DISTANCE_MAP.get(minNode) + edge.getDistance();
+                    int alt = DISTANCE_MAP.get(minNode) + edge.getDistance();
 
                     if (alt < DISTANCE_MAP.get(edge.getDestination())){ // If the alternative cost is smaller than the current cost.
                         // Update the min cost to reach this node.
@@ -68,16 +68,7 @@ public class Dijkstra {
     }
     
     private static void printDistances(Node destination){
-        // Print each node and the min cost to reach it from the source node.
-
-        println(DISTANCE_MAP.get(destination));
-
-        // println("*****************************");
-        // for (HashMap.Entry<Node, Long> entry : DISTANCE_MAP.entrySet()) {
-        //     Node node = entry.getKey();
-        //     long d = entry.getValue();
-        //     println(node.getName() + " --> " + d);
-        // }
+        println("Total Distance: " + String. format("%.3f", DISTANCE_MAP.get(destination)/6F) + "km \n");
     }
 
     private static void printPrevious(){
@@ -96,7 +87,7 @@ public class Dijkstra {
 
     private static void printShortestPath(Node source, Node destination){
         // Reconstruct the path to the destination using the the previous nodes.
-        println("*****************************");
+        println("\nShortest path from '"+ source.getName() + "' to '"+ destination.getName() + "' using Dijkstra.");
         ArrayList<Node> path = new ArrayList<>();
         print(source.getName());
         while (PREVIOUS_NODE.get(destination) != null ){
@@ -115,16 +106,14 @@ public class Dijkstra {
         // Linear search for the min cost node based on the distance. 
         Node minNode = null;
         long minDistance = Long.MAX_VALUE;
-        for (HashMap.Entry<Node, Long> entry : DISTANCE_MAP.entrySet()) {
+        for (HashMap.Entry<Node, Integer> entry : DISTANCE_MAP.entrySet()) {
             Node node = entry.getKey();
-            Long distance = entry.getValue();
+            int distance = entry.getValue();
            if(UNVISITED.contains(node) && distance < minDistance){
                 minDistance = distance;
                 minNode = node;
            }
         }
         return minNode;
-    }
-
-    
+    }    
 }
