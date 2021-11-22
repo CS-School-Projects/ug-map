@@ -4,12 +4,12 @@ This is a terminal based app written in Java to desmonstrate the application of 
 - First all the vantage places and their relative distances on the campus are modelled in a graph.
 - The graph is representred in the program using adjancency list.
 - The distances among the various places were precomputed using Google Map API.
-- Dijstrak's algorithm was used to find the best route based distances.
+- Dijstrak's algorithm was used to find the best route based on distances.
 - A* algorithm was used to find the best route based on time.
 
 
 ## Language
-- Java 
+- Java
 
 ## Cloning the Repo
 Clone the repository and open it in an editor.

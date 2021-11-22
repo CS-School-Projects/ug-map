@@ -29,6 +29,15 @@ public class Digraph {
         }
     }
 
+    public int calculateDistance(ArrayList<Node> nodes){
+        int distance = 0;
+        for(int i=0; i<nodes.size()-1; i++){
+            Edge edge = getEdge(nodes.get(i), nodes.get(i+1));
+            distance += edge.getDistance();
+        }
+        return distance;
+    }
+
     public ArrayList<Edge> getDestinationEdges(Node source){
         ArrayList<Edge> destinations = new ArrayList<>();
         for (Edge edge: this.EDGES){
@@ -37,6 +46,10 @@ public class Digraph {
             }
         }
         return destinations;
+    }
+
+    public ArrayList<Node> getNeighbourNodes(Node source){
+       return GRAPH.get(source);
     }
 
     public Edge getEdge(Node source, Node destination) {

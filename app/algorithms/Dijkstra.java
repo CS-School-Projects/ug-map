@@ -68,7 +68,7 @@ public class Dijkstra {
     }
     
     private static void printDistances(Node destination){
-        println("Total Distance: " + String. format("%.3f", DISTANCE_MAP.get(destination)/6F) + "km \n");
+        println("Total Distance: " + String. format("%.3f", DISTANCE_MAP.get(destination)/1000f) + "km \n");
     }
 
     private static void printPrevious(){
