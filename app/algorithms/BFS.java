@@ -2,13 +2,13 @@ package app.algorithms;
 
 import java.util.ArrayList;
 
-import app.graph.Digraph;
+import app.graph.Graph;
 import app.graph.Node;
 
 public class BFS {
     public static ArrayList<ArrayList<Node>> ALL_PATHS = new ArrayList<>();
 
-    public static void dfs(Digraph graph, Node source, Node destination, ArrayList<Node> visited, ArrayList<Node> path){
+    public static void dfs(Graph graph, Node source, Node destination, ArrayList<Node> visited, ArrayList<Node> path){
         if (source == destination) {
             ALL_PATHS.add(new ArrayList<>(path));
             return;
@@ -25,18 +25,17 @@ public class BFS {
                 path.remove(node);
             }
         }
- 
         // Mark the current node
         visited.remove(source);
     }
 
-
-    public static void findAllPaths(Digraph graph, Node source, Node destination){
+    public static ArrayList<ArrayList<Node>> findAllPaths(Graph graph, Node source, Node destination){
         ArrayList<Node> visited = new ArrayList<>();
         ArrayList<Node> path = new ArrayList<>();
+        ALL_PATHS = new ArrayList<>();
         path.add(source);
         dfs(graph, source, destination, visited, path);
-        System.out.println("Done " + ALL_PATHS.toString());
+        return ALL_PATHS;
     }
 
 }

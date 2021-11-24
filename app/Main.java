@@ -1,6 +1,9 @@
 package app;
 
+import java.util.ArrayList;
+
 import javax.swing.*;
+import java.awt.*;    
 
 import app.algorithms.AStar;
 import app.algorithms.BFS;
@@ -13,72 +16,164 @@ import app.graph.Node;
 public class Main{
     public static void main(String[] args) {
         Graph graph = new Graph();
-        Node mainGate = new Node("Main Gate");
-        Node greatHall = new Node("Great Hall");
-        Node newNBlock = new Node("New N Block");
-        Node jqb = new Node("JQ Building");
-        Node legon = new Node("Legon");
-        Node cc = new Node("CC");
+
+        // Nodes in the graph.
+        Node gym = new Node("Gym");
         Node diaspora = new Node("Diaspora");
-        Node blameLibrary = new Node("Balme Library");
+        Node ish = new Node("ISH");
+        Node nightMarket = new Node("Night Market");
+        Node sarbahHall = new Node("Sarbah Hall");
+        Node commonWealth = new Node("Common Wealth");
+        Node greatHall = new Node("Great Hall");        
+        Node legonHall = new Node("Legon Hall");
+        Node akuafoHall = new Node("Akuafo Hall");
+        Node voltaHall = new Node("Volta Hall");
+        Node balmeLibrary = new Node("Balme Library");
+        Node cbas = new Node("CBAS");
+        Node mainGate = new Node("Main Gate");
+        Node jqb = new Node("JQ Building");
+        Node lawSchool = new Node("Law School");
+        Node busSchool = new Node("Business School");
+        Node gcb = new Node("GCB");
+        Node csdepartment = new Node("CS Department");
+        Node polictialScienceDepartment = new Node("Political Science Department");
+        Node nb = new Node("NB");
+        Node nnb = new Node("NNB");
 
-        graph.addNode(mainGate);
-        graph.addNode(greatHall);
-        graph.addNode(newNBlock);
-        graph.addNode(jqb);
-        graph.addNode(cc);
-        graph.addNode(legon);
-        graph.addNode(diaspora);
-        graph.addNode(blameLibrary);
+        graph.addEdge(new Edge(gym, diaspora, 500, 10)); 
+        graph.addEdge(new Edge(gym, ish, 415, 8)); 
+        graph.addEdge(new Edge(gym, nightMarket, 634, 9)); 
+        
+        graph.addEdge(new Edge(diaspora, ish, 400, 8)); 
+        graph.addEdge(new Edge(ish, nightMarket, 214, 3)); 
 
-        graph.addEdge(new Edge(mainGate, greatHall, 200));
-        graph.addEdge(new Edge(mainGate, newNBlock, 400));
-        graph.addEdge(new Edge(mainGate, blameLibrary, 800));
-        graph.addEdge(new Edge(mainGate, legon, 800));
+        graph.addEdge(new Edge(nightMarket, commonWealth, 1025, 20)); 
+        graph.addEdge(new Edge(nightMarket, legonHall, 914, 17)); 
+        graph.addEdge(new Edge(nightMarket, sarbahHall, 350, 5)); 
 
-        graph.addEdge(new Edge(greatHall, jqb, 800));
-        graph.addEdge(new Edge(greatHall, newNBlock, 100));
+        graph.addEdge(new Edge(commonWealth, greatHall, 515, 9)); 
+        graph.addEdge(new Edge(commonWealth, voltaHall, 440, 5)); 
+        graph.addEdge(new Edge(commonWealth, legonHall, 460, 5)); 
 
-        graph.addEdge(new Edge(newNBlock, jqb, 200));
-        graph.addEdge(new Edge(newNBlock, cc, 500));
+        graph.addEdge(new Edge(sarbahHall, legonHall, 630, 12)); 
+        graph.addEdge(new Edge(sarbahHall, akuafoHall, 460, 8)); 
 
-        graph.addEdge(new Edge(jqb, diaspora, 100));
-        graph.addEdge(new Edge(jqb, cc, 900));
+        graph.addEdge(new Edge(legonHall, akuafoHall, 583, 7)); 
+        graph.addEdge(new Edge(legonHall, balmeLibrary, 530, 6)); 
+        graph.addEdge(new Edge(legonHall, voltaHall, 260, 3)); 
 
-        graph.addEdge(new Edge(cc, diaspora, 2200));
-        graph.addEdge(new Edge(cc, blameLibrary, 100));
-        graph.addEdge(new Edge(blameLibrary, cc, 100));
+        graph.addEdge(new Edge(akuafoHall, cbas, 385, 5)); 
+        graph.addEdge(new Edge(akuafoHall, csdepartment, 780, 13)); 
+        graph.addEdge(new Edge(akuafoHall, balmeLibrary, 580, 7)); 
 
-        graph.printGraph();
+        graph.addEdge(new Edge(cbas, mainGate, 624, 6)); 
+        graph.addEdge(new Edge(cbas, jqb, 610, 9)); 
+        graph.addEdge(new Edge(jqb, lawSchool, 466, 5)); 
 
-        System.out.println("Please choose your current location:");
-        graph.listPlaces(null);
+        graph.addEdge(new Edge(lawSchool, csdepartment, 384, 4)); 
 
+        graph.addEdge(new Edge(balmeLibrary, lawSchool, 960, 18)); 
+        graph.addEdge(new Edge(balmeLibrary, busSchool, 203, 4)); 
 
-        // String place = scanner.nextLine();
-        // Node source = graph.getNodeByName(place);
+        graph.addEdge(new Edge(voltaHall, busSchool, 390, 3)); 
+        graph.addEdge(new Edge(voltaHall, balmeLibrary, 415, 5)); 
 
-        // System.out.println("\nPlease choose your destination:");
-        // String place2 = scanner.nextLine();
-        // Node destination = graph.getNodeByName(place2);
-        // Dijkstra.findShortestPath(graph, source, destination);
+        graph.addEdge(new Edge(voltaHall, balmeLibrary, 415, 5)); 
+        
+        graph.addEdge(new Edge(busSchool, gcb, 433, 5)); 
+        graph.addEdge(new Edge(busSchool, nb, 424, 5)); 
+        graph.addEdge(new Edge(busSchool, csdepartment, 389, 4)); 
+        
+        graph.addEdge(new Edge(polictialScienceDepartment, csdepartment, 386, 4)); 
+        graph.addEdge(new Edge(polictialScienceDepartment, nb, 204, 3)); 
+        graph.addEdge(new Edge(nb, nnb, 330, 4)); 
+        graph.addEdge(new Edge(nnb, gcb, 160, 3)); 
 
-        // AStar.findShortestPath(graph, source,destination);
+        // MAP GUI
+        UgMap ugMap = new UgMap();  
+        JFrame mapFrame =new JFrame();  
+        mapFrame.add(ugMap);  
+        mapFrame.setTitle("UG MAP");
+        mapFrame.setSize(850,774);  
+        mapFrame.setVisible(true);
 
         // GUI
-        String places[] = {"Great Hall", "Balme Library", "CC", "New N Block", "Diaspora", "JQ Building"};
+        final int WINDOW_WIDTH = 800;
+        final int WINDOW_HEIGHT = 600;
+
+        String[] places = new String[graph.getNodeSize()];
+        int index = 0;
+        for(Node node: graph.getNodes()){
+            places[index] = node.getName();
+            index++;
+        }
+
         JFrame frame = new JFrame();
+        frame.setTitle("UG MAP: Controls UI");
+        frame.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
 
+        // Source
         JComboBox<String> sourceCombo = new JComboBox<String>(places);
-        sourceCombo.setBounds(10,10,400,40);
+        JLabel sourceLabel = new JLabel("CurrentLocation:");
+        sourceLabel.setForeground(Color.MAGENTA);
+        sourceLabel.setBounds(10,10,WINDOW_WIDTH/2-100,20);
+        sourceCombo.setBounds(5,20,WINDOW_WIDTH/2-100,40);
         frame.add(sourceCombo);
-        JComboBox<String> destinationCombo = new JComboBox<String>(places);
-        destinationCombo.setBounds(10,50,400,40);
-        frame.add(destinationCombo);
+        frame.add(sourceLabel);
 
+        // Destination
+        JComboBox<String> destinationCombo = new JComboBox<String>(places);
+        JLabel detinationLabel = new JLabel("I'm going to:");
+        detinationLabel.setForeground(Color.MAGENTA);
+        detinationLabel.setBounds(WINDOW_WIDTH/2,10,WINDOW_WIDTH/2-100,20);
+        destinationCombo.setBounds(WINDOW_WIDTH/2,20,WINDOW_WIDTH/2-100,40);
+        frame.add(destinationCombo);
+        frame.add(detinationLabel);
+
+        // Find Button
         JButton btnFindShortestPath = new JButton("Find Shortest Path");
-        btnFindShortestPath.setBounds(10,90,400,40);
+        btnFindShortestPath.setBounds(WINDOW_WIDTH/2 - 200 ,70,400,40);
         frame.add(btnFindShortestPath);
+        
+        // Find
+        JLabel shortestPathLabel = new JLabel("Shortest Path: ");
+        shortestPathLabel.setBounds(10,110,WINDOW_WIDTH/2-100,20);
+        shortestPathLabel.setForeground(Color.MAGENTA);
+        frame.add(shortestPathLabel);
+      
+        // Shortest Path Result
+        JLabel shortestPathResultLabl = new JLabel();
+        shortestPathResultLabl.setBounds(10,130,WINDOW_WIDTH - 10,20);
+        frame.add(shortestPathResultLabl);
+
+
+        // Shortest Distance Result
+        JLabel shortestDistaneResultLabl = new JLabel();
+        shortestDistaneResultLabl.setBounds(10,150,WINDOW_WIDTH - 10,20);
+        frame.add(shortestDistaneResultLabl);
+
+
+        // Landmarks
+        JLabel landMarkResultLable = new JLabel("Land Marks:");
+        landMarkResultLable.setBounds(10,170,WINDOW_WIDTH - 10,20);
+        frame.add(landMarkResultLable);
+
+
+        JSeparator sep = new JSeparator();  
+        sep.setBounds(5,195,WINDOW_WIDTH - 5,10);
+        frame.add(sep);  
+
+
+        // Landmarks
+        JLabel altPathLabel = new JLabel("Alternative Routes");
+        altPathLabel.setForeground(Color.MAGENTA);
+        altPathLabel.setBounds(10,220,WINDOW_WIDTH - 10,20);
+        frame.add(altPathLabel);
+
+        JTextArea area = new JTextArea();  
+        area.setBounds(10,240,WINDOW_WIDTH - 10,200);
+        frame.add(area);  
 
         btnFindShortestPath.addActionListener(event->{
             String souceName = sourceCombo.getSelectedItem().toString();
@@ -86,13 +181,28 @@ public class Main{
 
             Node soucNode = graph.getNodeByName(souceName);
             Node destNode = graph.getNodeByName(destName);
-            Dijkstra.findShortestPath(graph, soucNode, destNode);
+            ArrayList<Node> shortestPath = Dijkstra.findShortestPath(graph, soucNode, destNode);
 
-            BFS.findAllPaths(graph, soucNode, destNode);
+            shortestPathResultLabl.setText("The Shortest Path is: " + shortestPath.toString());
+            shortestDistaneResultLabl.setText("Total Distance is: "+Dijkstra.getDistance(destNode));
+
+            ArrayList<ArrayList<Node>> allPaths = BFS.findAllPaths(graph, soucNode, destNode);
+
+            StringBuilder builder = new StringBuilder();
+            for (ArrayList<Node> nodes :allPaths.subList(allPaths.size() - 6, allPaths.size()-1) ){
+                String distance = String.format("%.3f",  graph.calculateDistance(nodes)/1000f) + "km";
+                builder.append(nodes.toString() + ", " + distance+ "\n");
+            }
+
+            area.setText(builder.toString());
+
+            frame.invalidate();
+            frame.validate();
+            frame.repaint();
+            System.out.println("shortestPath " + shortestPath.toString());
         });
 
         frame.setLayout(null);
-        frame.setSize(800,600);
         frame.setVisible(true);
 
     }

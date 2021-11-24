@@ -2,25 +2,35 @@ package app.graph;
 
 import java.util.ArrayList;
 
-public class Edge implements Comparable<Edge>{
+public class Edge implements Comparable<Edge>, Cloneable{
     private Node source;
     private Node destination;
-    private long time;
-    private int distance;
-    private ArrayList<String> landMarks = new ArrayList<>();
+    private int time;
+    private double distance;
+    private String landMarks;
 
     public Edge(Node source, Node destination, int distance){
         this.source = source;
         this.destination = destination;
         this.distance = distance;
         this.time = -1;
+        this.landMarks = "";
     }
 
-    public Edge(Node source, Node destination, int distance,  long time){
+    public Edge(Node source, Node destination, double distance,  int time){
         this.source = source;
         this.destination = destination;
         this.distance = distance;
         this.time = time;
+        this.landMarks = "";
+    }
+
+    public Edge(Node source, Node destination, double distance,  int time, String landMarks){
+        this.source = source;
+        this.destination = destination;
+        this.distance = distance;
+        this.time = time;
+        this.landMarks = landMarks;
     }
 
     public Node getDestination() {
@@ -31,7 +41,15 @@ public class Edge implements Comparable<Edge>{
         return source;
     }
 
-    public int getDistance() {
+    public void setSource(Node source){
+        this.source = source;
+    }
+
+    public void setDestination(Node destination){
+        this.destination = destination;
+    }
+
+    public double getDistance() {
         return distance;
     }
     
@@ -54,4 +72,11 @@ public class Edge implements Comparable<Edge>{
         return 0;
     }
 
+    protected Edge clone() {
+        try {
+            return (Edge) super.clone();
+        } catch (CloneNotSupportedException e) {
+            return null;
+        }
+    }
 }
