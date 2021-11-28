@@ -196,7 +196,7 @@ public class Main{
         frame.add(landmarkInput);  
 
         // Find Landmark
-        JButton btnFindLandmark = new JButton("Find Landmark Route");
+        JButton btnFindLandmark = new JButton("Find Landmark");
         btnFindLandmark.setBounds( WINDOW_WIDTH / 2 + 10, 430, 200, 50);
         frame.add(btnFindLandmark);
 
