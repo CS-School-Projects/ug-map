@@ -2,6 +2,7 @@ package app.algorithms;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.PriorityQueue;
 import java.util.AbstractMap.SimpleEntry;
 
@@ -10,16 +11,17 @@ import app.graph.Edge;
 import app.graph.Node;
 
 public class AStar {
-    // A map of a node and the previous node to reach it. Used later to reconstruct the min path.
-    private static final PriorityQueue<SimpleEntry<Node, Double>> OPEN_SET = new PriorityQueue<>((first,second)->first.getValue().compareTo(second.getValue()));
-    // Just to keep track of the content of OPEN_SET.
-    private static final ArrayList<Node> OPEN_SET_HASH = new ArrayList<>();
-    // A map of a node and the previous node to reach it. Used later to reconstruct the min path.
-    private static final HashMap<Node, Node> CAME_FROM = new HashMap<>(); 
-    private static final HashMap<Node, Double> G_SCORE = new HashMap<>(); 
-    private static final HashMap<Node, Double> F_SCORE = new HashMap<>(); 
 
-    public static void findShortestPath(Graph graph, Node source, Node destination){
+    public static List<Node> findFastestPath(Graph graph, Node source, Node destination){
+           // A map of a node and the previous node to reach it. Used later to reconstruct the min path.
+        PriorityQueue<SimpleEntry<Node, Double>> OPEN_SET = new PriorityQueue<>((first,second)->first.getValue().compareTo(second.getValue()));
+        // Just to keep track of the content of OPEN_SET.
+        ArrayList<Node> OPEN_SET_HASH = new ArrayList<>();
+        // A map of a node and the previous node to reach it. Used later to reconstruct the min path.
+        HashMap<Node, Node> CAME_FROM = new HashMap<>(); 
+        HashMap<Node, Double> G_SCORE = new HashMap<>(); 
+        HashMap<Node, Double> F_SCORE = new HashMap<>(); 
+
         for(Node node: graph.getNodes()){
             G_SCORE.put(node, Double.MAX_VALUE);
             F_SCORE.put(node, Double.MAX_VALUE);
@@ -37,15 +39,14 @@ public class AStar {
             Node current = minSet.getKey();
             if (current == destination){
                 // We've found the destination.
-                reconstructPath(CAME_FROM, current);
-                return;
+                return reconstructPath(CAME_FROM, current);
             }
             OPEN_SET.remove(minSet); 
             OPEN_SET_HASH.remove(current); 
 
             // Explore all the neighbours of this node.
             for(Edge edge: graph.getDestinationEdges(current)){
-                double tentative_gScore = G_SCORE.get(current) + edge.getDistance();
+                double tentative_gScore = G_SCORE.get(current) + edge.getTime();
                 Node neighbour = edge.getDestination();
 
                 if(tentative_gScore < G_SCORE.get(neighbour)){
@@ -61,14 +62,23 @@ public class AStar {
                 }
             }
         }
+        return null;
     }
 
-    private static void reconstructPath(HashMap<Node, Node> cameFrom, Node current){ 
-        System.out.println(current.getName());
+    private static List<Node> reconstructPath(HashMap<Node, Node> cameFrom, Node current){ 
+        List<Node> path = new ArrayList<>();
+        path.add(current);
         while(cameFrom.containsKey(current)){
             current = cameFrom.get(current);
-            System.out.println(current.getName());
+            path.add(current);
         }
+
+        // Reverse the path order. 
+        List<Node> result = new ArrayList<>();
+        for(int i = path.size() -1; i >=0; i--){
+            result.add(path.get(i));
+        }
+        return result;
     }
 
     private static double heuristic(Node source, Node destination){

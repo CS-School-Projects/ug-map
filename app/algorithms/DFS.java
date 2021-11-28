@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import app.graph.Graph;
 import app.graph.Node;
 
-public class BFS {
+public class DFS {
     public static ArrayList<ArrayList<Node>> ALL_PATHS = new ArrayList<>();
 
     public static void dfs(Graph graph, Node source, Node destination, ArrayList<Node> visited, ArrayList<Node> path){

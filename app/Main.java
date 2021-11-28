@@ -1,12 +1,13 @@
 package app;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.*;
 import java.awt.*;    
 
 import app.algorithms.AStar;
-import app.algorithms.BFS;
+import app.algorithms.DFS;
 import app.algorithms.Dijkstra;
 import app.graph.Edge;
 import app.graph.Graph;
@@ -126,27 +127,32 @@ public class Main{
         JComboBox<String> destinationCombo = new JComboBox<String>(places);
         JLabel detinationLabel = new JLabel("I'm going to:");
         detinationLabel.setForeground(Color.MAGENTA);
-        detinationLabel.setBounds(WINDOW_WIDTH/2,10,WINDOW_WIDTH/2-100,20);
-        destinationCombo.setBounds(WINDOW_WIDTH/2,20,WINDOW_WIDTH/2-100,40);
+        detinationLabel.setBounds(WINDOW_WIDTH/2 + 50, 10, WINDOW_WIDTH/2-100,20);
+        destinationCombo.setBounds(WINDOW_WIDTH/2+ 50, 20, WINDOW_WIDTH/2-100,40);
         frame.add(destinationCombo);
         frame.add(detinationLabel);
 
         // Find Button
-        JButton btnFindShortestPath = new JButton("Find Shortest Path");
-        btnFindShortestPath.setBounds(WINDOW_WIDTH/2 - 200 ,70,400,40);
+        JButton btnFindShortestPath = new JButton("Find Shortest Route");
+        btnFindShortestPath.setBounds(WINDOW_WIDTH/2 - 300 ,70,300,60);
         frame.add(btnFindShortestPath);
-        
+
+        // Find Button
+        JButton btnFindFasterPath = new JButton("Find Fastest Route");
+        btnFindFasterPath.setBounds(WINDOW_WIDTH/2 + 50, 70, 300, 60);
+        frame.add(btnFindFasterPath);
+
+
         // Find
-        JLabel shortestPathLabel = new JLabel("Shortest Path: ");
+        JLabel shortestPathLabel = new JLabel("Best Routes: ");
         shortestPathLabel.setBounds(10,110,WINDOW_WIDTH/2-100,20);
         shortestPathLabel.setForeground(Color.MAGENTA);
         frame.add(shortestPathLabel);
       
-        // Shortest Path Result
+        // Shortest Route Result
         JLabel shortestPathResultLabl = new JLabel();
         shortestPathResultLabl.setBounds(10,130,WINDOW_WIDTH - 10,20);
         frame.add(shortestPathResultLabl);
-
 
         // Shortest Distance Result
         JLabel shortestDistaneResultLabl = new JLabel();
@@ -164,16 +170,18 @@ public class Main{
         sep.setBounds(5,195,WINDOW_WIDTH - 5,10);
         frame.add(sep);  
 
-
         // Landmarks
         JLabel altPathLabel = new JLabel("Alternative Routes");
         altPathLabel.setForeground(Color.MAGENTA);
         altPathLabel.setBounds(10,220,WINDOW_WIDTH - 10,20);
         frame.add(altPathLabel);
 
+
         JTextArea area = new JTextArea();  
-        area.setBounds(10,240,WINDOW_WIDTH - 10,200);
-        frame.add(area);  
+        JScrollPane pane = new JScrollPane();
+        pane.getViewport ().setView(area);
+        pane.setBounds(10,240,WINDOW_WIDTH - 20,200);
+        frame.add(pane);  
 
         btnFindShortestPath.addActionListener(event->{
             String souceName = sourceCombo.getSelectedItem().toString();
@@ -183,10 +191,10 @@ public class Main{
             Node destNode = graph.getNodeByName(destName);
             ArrayList<Node> shortestPath = Dijkstra.findShortestPath(graph, soucNode, destNode);
 
-            shortestPathResultLabl.setText("The Shortest Path is: " + shortestPath.toString());
+            shortestPathResultLabl.setText("The Shortest Route is: " + shortestPath.toString());
             shortestDistaneResultLabl.setText("Total Distance is: "+Dijkstra.getDistance(destNode));
 
-            ArrayList<ArrayList<Node>> allPaths = BFS.findAllPaths(graph, soucNode, destNode);
+            ArrayList<ArrayList<Node>> allPaths = DFS.findAllPaths(graph, soucNode, destNode);
 
             StringBuilder builder = new StringBuilder();
             for (ArrayList<Node> nodes :allPaths.subList(allPaths.size() - 6, allPaths.size()-1) ){
@@ -195,11 +203,29 @@ public class Main{
             }
 
             area.setText(builder.toString());
+        });
 
-            frame.invalidate();
-            frame.validate();
-            frame.repaint();
-            System.out.println("shortestPath " + shortestPath.toString());
+        btnFindFasterPath.addActionListener(event->{
+            String souceName = sourceCombo.getSelectedItem().toString();
+            String destName = destinationCombo.getSelectedItem().toString();
+
+            Node soucNode = graph.getNodeByName(souceName);
+            Node destNode = graph.getNodeByName(destName);
+            Dijkstra.findShortestPath(graph, soucNode, destNode);
+            List<Node> fastesPath = AStar.findFastestPath(graph, soucNode, destNode);
+
+            shortestPathResultLabl.setText("The Fastest Route is: " + fastesPath.toString());
+            shortestDistaneResultLabl.setText("Total Distance is: "+Dijkstra.getDistance(destNode));
+
+            ArrayList<ArrayList<Node>> allPaths = DFS.findAllPaths(graph, soucNode, destNode);
+
+            StringBuilder builder = new StringBuilder();
+            for (ArrayList<Node> nodes :allPaths.subList(allPaths.size() - 6, allPaths.size()-1) ){
+                String distance = String.format("%.3f",  graph.calculateDistance(nodes)/1000f) + "km";
+                builder.append(nodes.toString() + ", " + distance+ "\n");
+            }
+
+            area.setText(builder.toString());
         });
 
         frame.setLayout(null);
