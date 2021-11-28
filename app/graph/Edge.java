@@ -57,6 +57,10 @@ public class Edge implements Comparable<Edge>, Cloneable{
         return time;
     }
 
+    public String getLandmarks(){
+        return this.landMarks;
+    }
+
     
     @Override
     public String toString() {
