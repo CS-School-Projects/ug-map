@@ -3,7 +3,6 @@ package app.graph;
 public class Node {
     private String name;
 
-    //
     public Node(String name){
         this.name = name;
     }
@@ -21,9 +20,6 @@ public class Node {
         return false;
     }
     
-
-
-
     @Override
     public String toString() {
         return this.name;
