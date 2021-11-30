@@ -1,15 +1,25 @@
 package app.algorithms;
 
 import java.util.Arrays;
+import java.util.Set;
+
 import static java.util.Arrays.stream;
+
+import java.util.ArrayList;
 import java.util.concurrent.*;
+
+import app.graph.Edge;
+import app.graph.Graph;
+import app.graph.Node;
  
 public class VogelsApproximationMethod {
  
-    final static int[] demand = {30, 20, 70, 30, 60};
-    final static int[] supply = {50, 60, 50, 50};
+    final static int[] demand = {1, 1, 1, 1, 1};
+    final static int[] supply = {1, 1, 1, 1};
     final static int[][] costs = {{16, 16, 13, 22, 17}, {14, 14, 13, 19, 15},
     {19, 19, 20, 23, 50}, {50, 12, 50, 15, 11}};
+
+    final static ArrayList<ArrayList<Double>> graphCosts = new ArrayList<ArrayList<Double>>();
  
     final static int nRows = supply.length;
     final static int nCols = demand.length;
@@ -19,8 +29,18 @@ public class VogelsApproximationMethod {
     static int[][] result = new int[nRows][nCols];
  
     static ExecutorService es = Executors.newFixedThreadPool(2);
- 
-    public static void main(String[] args) throws Exception {
+
+    public static int getTotalCost(Graph graph, Node source, Node destination) {
+        ArrayList<Node> nodes = (ArrayList<Node>) graph.getNodes();
+        for(int i = 0; i < graph.getNodeSize(); i ++){
+            ArrayList<Double> cost = new ArrayList<>();
+            for(int j = 0; j < graph.getNodeSize(); j ++){
+                Edge edge = graph.getEdge(nodes.get(i), nodes.get(j));
+                cost.add(edge.getDistance());
+            }
+            graphCosts.add(cost);
+        }
+
         int supplyLeft = stream(supply).sum();
         int totalCost = 0;
  
@@ -41,21 +61,28 @@ public class VogelsApproximationMethod {
             result[r][c] = quantity;
             supplyLeft -= quantity;
  
-            totalCost += quantity * costs[r][c];
+            // totalCost += quantity * costs[r][c];
+            totalCost += quantity * graphCosts.get(r).get(c);
         }
  
         stream(result).forEach(a -> System.out.println(Arrays.toString(a)));
-        System.out.println("Total cost: " + totalCost);
- 
         es.shutdown();
+        return totalCost;
     }
  
-    static int[] nextCell() throws Exception {
+    static int[] nextCell() {
         Future<int[]> f1 = es.submit(() -> maxPenalty(nRows, nCols, true));
         Future<int[]> f2 = es.submit(() -> maxPenalty(nCols, nRows, false));
  
-        int[] res1 = f1.get();
-        int[] res2 = f2.get();
+        int[] res1;
+        int[] res2;
+        try {
+            res1 = f1.get();
+            res2 = f2.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+           return new int[]{-1};
+        }
  
         if (res1[3] == res2[3])
             return res1[2] < res2[2] ? res1 : res2;

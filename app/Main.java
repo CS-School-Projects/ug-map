@@ -9,6 +9,7 @@ import java.awt.*;
 import app.algorithms.AStar;
 import app.algorithms.DFS;
 import app.algorithms.Dijkstra;
+import app.algorithms.VogelsApproximationMethod;
 import app.graph.Edge;
 import app.graph.Graph;
 import app.graph.Node;
@@ -115,22 +116,22 @@ public class Main{
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
 
         // Source
-        JComboBox<String> sourceCombo = new JComboBox<String>(places);
+        JComboBox<String> sourceSelectionBox = new JComboBox<String>(places);
         JLabel sourceLabel = new JLabel("CurrentLocation:");
         sourceLabel.setForeground(Color.MAGENTA);
         sourceLabel.setBounds(10,10,WINDOW_WIDTH/2-100,20);
-        sourceCombo.setBounds(5,20,WINDOW_WIDTH/2-100,40);
-        frame.add(sourceCombo);
+        sourceSelectionBox.setBounds(5,20,WINDOW_WIDTH/2-100,40);
+        frame.add(sourceSelectionBox);
         frame.add(sourceLabel);
 
         // Destination
-        JComboBox<String> destinationCombo = new JComboBox<String>(places);
-        destinationCombo.setSelectedIndex(2);
+        JComboBox<String> destinationSelectionBox = new JComboBox<String>(places);
+        destinationSelectionBox.setSelectedIndex(2);
         JLabel detinationLabel = new JLabel("I'm going to:");
         detinationLabel.setForeground(Color.MAGENTA);
         detinationLabel.setBounds(WINDOW_WIDTH/2 + 50, 10, WINDOW_WIDTH/2-100,20);
-        destinationCombo.setBounds(WINDOW_WIDTH/2+ 50, 20, WINDOW_WIDTH/2-100,40);
-        frame.add(destinationCombo);
+        destinationSelectionBox.setBounds(WINDOW_WIDTH/2+ 50, 20, WINDOW_WIDTH/2-100,40);
+        frame.add(destinationSelectionBox);
         frame.add(detinationLabel);
 
         // Find Shortest Button
@@ -202,8 +203,8 @@ public class Main{
 
 
         btnFindShortestPath.addActionListener(event->{
-            String sourceName = sourceCombo.getSelectedItem().toString();
-            String destName = destinationCombo.getSelectedItem().toString();
+            String sourceName = sourceSelectionBox.getSelectedItem().toString();
+            String destName = destinationSelectionBox.getSelectedItem().toString();
 
             Node sourceNode = graph.getNodeByName(sourceName);
             Node destNode = graph.getNodeByName(destName);
@@ -211,7 +212,7 @@ public class Main{
 
             shortestPathResultLabl.setText("The Shortest Route: " + shortestPath.toString());
             shortestDistaneResultLabl.setText("Total Distance: " + Dijkstra.getDistance(destNode));
-            landMarkResultLable.setText("Landmarks : "+graph.getLandmarks(shortestPath));
+            landMarkResultLable.setText("Landmarks : " + graph.getLandmarks(shortestPath));
 
             ArrayList<ArrayList<Node>> allPaths = DFS.findAllPaths(graph, sourceNode, destNode);
 
@@ -224,8 +225,8 @@ public class Main{
         });
 
         btnFindFasterPath.addActionListener(event->{
-            String sourceName = sourceCombo.getSelectedItem().toString();
-            String destName = destinationCombo.getSelectedItem().toString();
+            String sourceName = sourceSelectionBox.getSelectedItem().toString();
+            String destName = destinationSelectionBox.getSelectedItem().toString();
 
             Node sourceNode = graph.getNodeByName(sourceName);
             Node destNode = graph.getNodeByName(destName);
@@ -233,7 +234,7 @@ public class Main{
             List<Node> fastesPath = AStar.findFastestPath(graph, sourceNode, destNode);
 
             shortestPathResultLabl.setText("The Fastest Route: " + fastesPath.toString());
-            shortestDistaneResultLabl.setText("Total Distance: " + Dijkstra.getDistance(destNode));
+            shortestDistaneResultLabl.setText("Total Distance: " + VogelsApproximationMethod.getTotalCost(graph, sourceNode, destNode));
             landMarkResultLable.setText("Landmarks : "+graph.getLandmarks((ArrayList<Node>) fastesPath));
 
             ArrayList<ArrayList<Node>> allPaths = DFS.findAllPaths(graph, sourceNode, destNode);

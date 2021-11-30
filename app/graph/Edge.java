@@ -1,6 +1,5 @@
 package app.graph;
 
-import java.util.ArrayList;
 
 public class Edge implements Comparable<Edge>, Cloneable{
     private Node source;
