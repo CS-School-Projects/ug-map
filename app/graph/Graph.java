@@ -111,6 +111,10 @@ public class Graph {
         return nodeSize;
     }
 
+    public ArrayList<Edge> getEdges(){
+        return this.EDGES;
+    }
+
     public void printGraph(){
         System.out.println("\n          GRAPH: ADJACENCY LIST                ");
         System.out.println("              PLACES ON CAMPUS                 \n");

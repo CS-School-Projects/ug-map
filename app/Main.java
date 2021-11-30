@@ -234,7 +234,7 @@ public class Main{
             List<Node> fastesPath = AStar.findFastestPath(graph, sourceNode, destNode);
 
             shortestPathResultLabl.setText("The Fastest Route: " + fastesPath.toString());
-            shortestDistaneResultLabl.setText("Total Distance: " + VogelsApproximationMethod.getTotalCost());
+            shortestDistaneResultLabl.setText("Total Distance: " + VogelsApproximationMethod.getTotalCost(graph, sourceNode, destNode));
             landMarkResultLable.setText("Landmarks : "+graph.getLandmarks((ArrayList<Node>) fastesPath));
 
             ArrayList<ArrayList<Node>> allPaths = DFS.findAllPaths(graph, sourceNode, destNode);

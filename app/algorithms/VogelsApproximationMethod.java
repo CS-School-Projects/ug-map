@@ -1,8 +1,16 @@
 package app.algorithms;
 
 import java.util.Arrays;
+import java.util.Set;
+
 import static java.util.Arrays.stream;
+
+import java.util.ArrayList;
 import java.util.concurrent.*;
+
+import app.graph.Edge;
+import app.graph.Graph;
+import app.graph.Node;
  
 public class VogelsApproximationMethod {
  
@@ -10,6 +18,8 @@ public class VogelsApproximationMethod {
     final static int[] supply = {1, 1, 1, 1};
     final static int[][] costs = {{16, 16, 13, 22, 17}, {14, 14, 13, 19, 15},
     {19, 19, 20, 23, 50}, {50, 12, 50, 15, 11}};
+
+    final static ArrayList<ArrayList<Double>> graphCosts = new ArrayList<ArrayList<Double>>();
  
     final static int nRows = supply.length;
     final static int nCols = demand.length;
@@ -20,7 +30,17 @@ public class VogelsApproximationMethod {
  
     static ExecutorService es = Executors.newFixedThreadPool(2);
 
-    public static int getTotalCost() {
+    public static int getTotalCost(Graph graph, Node source, Node destination) {
+        ArrayList<Node> nodes = (ArrayList<Node>) graph.getNodes();
+        for(int i = 0; i < graph.getNodeSize(); i ++){
+            ArrayList<Double> cost = new ArrayList<>();
+            for(int j = 0; j < graph.getNodeSize(); j ++){
+                Edge edge = graph.getEdge(nodes.get(i), nodes.get(j));
+                cost.add(edge.getDistance());
+            }
+            graphCosts.add(cost);
+        }
+
         int supplyLeft = stream(supply).sum();
         int totalCost = 0;
  
@@ -41,7 +61,8 @@ public class VogelsApproximationMethod {
             result[r][c] = quantity;
             supplyLeft -= quantity;
  
-            totalCost += quantity * costs[r][c];
+            // totalCost += quantity * costs[r][c];
+            totalCost += quantity * graphCosts.get(r).get(c);
         }
  
         stream(result).forEach(a -> System.out.println(Arrays.toString(a)));
